@@ -1,24 +1,61 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from "react"; 
+import { StyledHeader, StyledTable } from "./styles/core.js";
 
 function App() {
+  const [infoList, setInfoList] = useState([]);
+
+  const loadData = async () =>{
+    fetch('https://adelinalr.000webhostapp.com/valoresAdmin.php')
+    .then(response => response.json())
+    .then(response => setInfoList(response))
+
+    console.log(infoList);
+}
+
+
+  useEffect(() => {
+    loadData();
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <StyledHeader>
+            <header>
+                <h1> 
+                    Validador de competencia
+                </h1>
+            </header>
+        </StyledHeader>
+
+        <StyledTable>
+          <thead>
+            <tr>
+              <td>Codigo</td>
+              <td>Nombre</td>
+              <td>Distancia</td>
+              <td>Tiempo</td>
+              <td>Imagen</td>
+            </tr>
+          </thead>
+          <tbody>
+              {infoList.map((o, i) =>{
+                return (
+                  <tr>
+                    <td>{o.Codigo}</td>
+                    <td>{o.Nombre}</td>
+                    <td>{o.Distancia} metros</td>
+                    <td>{o.Tiempo} min</td>
+                    <td> <img src={o.Imagen} style = {{width: 100}}/></td>
+                    <td><button>Validar</button>  <button>Eliminar</button></td>
+                  </tr>
+                ); 
+              })}             
+          </tbody>
+        </StyledTable>
+
+
+    </>
   );
 }
 
